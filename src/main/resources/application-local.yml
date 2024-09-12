@@ -1,0 +1,10 @@
+server:
+  port: 8081
+
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5434/testcase?currentSchema=person&useUnicode=true&characterEncoding=UTF8
+    username: postgres
+    password: postgres

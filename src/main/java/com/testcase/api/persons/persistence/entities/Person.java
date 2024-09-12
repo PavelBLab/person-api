@@ -2,10 +2,7 @@ package com.testcase.api.persons.persistence.entities;
 
 import com.testcase.api.persons.provider.models.PersonGender;
 import com.testcase.api.persons.provider.models.PersonStatus;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -21,6 +18,7 @@ import java.util.UUID;
 public class Person {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     private String name;

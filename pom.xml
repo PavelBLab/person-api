@@ -13,7 +13,7 @@
 
 	<groupId>com.testcase.api</groupId>
 	<artifactId>persons</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0-SNAPSHOT</version>
 	<name>persons</name>
 	<description>The Person API provides endpoints to interact with the person data.</description>
 	<url/>
@@ -37,13 +37,11 @@
 		<jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
 		<springdoc-openapi-ui.version>1.8.0</springdoc-openapi-ui.version>
 		<openapi-generator-maven-plugin.version>7.8.0</openapi-generator-maven-plugin.version>
+		<liquibase-core.version>4.29.2</liquibase-core.version>
 
-
-		<swagger.core.v3.version>2.2.1</swagger.core.v3.version>
-		<hibernate-validator.version>7.0.4.Final</hibernate-validator.version>
-
-
-		<io.rest-assured.version>5.1.1</io.rest-assured.version>
+<!--		<swagger.core.v3.version>2.2.1</swagger.core.v3.version>-->
+<!--		<hibernate-validator.version>7.0.4.Final</hibernate-validator.version>-->
+<!--		<io.rest-assured.version>5.1.1</io.rest-assured.version>-->
 	</properties>
 
 	<dependencies>
@@ -69,16 +67,15 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-docker-compose</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
-		</dependency>
-
-		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+			<version>${liquibase-core.version}</version>
 		</dependency>
 
 
@@ -105,6 +102,13 @@
 			<optional>true</optional>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-docker-compose</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+
 
 		<!-- Mapper -->
 		<dependency>
@@ -126,6 +130,21 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>1.19.6</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>1.19.6</version>
+			<scope>test</scope>
+		</dependency>
+
 
 	</dependencies>
 
