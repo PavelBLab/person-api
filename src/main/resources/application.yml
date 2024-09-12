@@ -1,1 +1,42 @@
-spring.application.name=persons
+spring:
+  application:
+    name: person-api
+
+  cloud:
+    kubernetes:
+      discovery:
+        enabled: true
+
+    datasource:
+      driver-class-name: org.postgresql.Driver
+      url: ${SPRING_DATASOURCE_URL}
+      username: ${SPRING_DATASOURCE_USERNAME}
+      password: ${SPRING_DATASOURCE_PASSWORD}
+
+  jpa:
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+#    hibernate:
+#      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+  liquibase:
+    change-log: classpath:liquibase/master.xml
+    default-schema: person
+    enabled: true
+
+jwks:
+  endpoint:
+    url: "http://oauth-api-service.dev.svc.cluster.local:80/.well-known/jwks.json"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: mappings, health, info, beans #"*"
+  endpoint:
+    health:
+      show-details: "always"
