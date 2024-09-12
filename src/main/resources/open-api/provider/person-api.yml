@@ -38,6 +38,9 @@ paths:
         'This endpoint returns a comprehensive list of all persons available in the database.
         The data can be used for various purposes such as displaying in a dropdown for user selection,
         providing data for reports, or populating person-specific information in your application.'
+      parameters:
+        - $ref: '#/components/parameters/person_name'
+        - $ref: '#/components/parameters/person_surname'
       responses:
         '200':
           description: 'A list of persons'
@@ -245,6 +248,20 @@ components:
       schema:
         type: string
         format: uuid
+
+    person_name:
+      name: person_name
+      in: query
+      description: A person first name for searching purpose.
+      schema:
+        type: string
+
+    person_surname:
+      name: person_surname
+      in: query
+      description: A person last name for searching purpose.
+      schema:
+        type: string
 
   schemas:
 

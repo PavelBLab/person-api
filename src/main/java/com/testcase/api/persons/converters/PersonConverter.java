@@ -22,7 +22,6 @@ public class PersonConverter {
         return personMapper.mapToShortPersonDtos(
                 personService.getAllPersons(name, surname)
         );
-
     }
 
     public PersonDto createOne(final PersonDto personDto) {
