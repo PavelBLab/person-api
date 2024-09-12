@@ -389,9 +389,9 @@ components:
       type: string
       enum:
         - MAN
-        - WOMEN
+        - WOMAN
       description: 'Enum representing the gender of a person.'
-      example: 'WOMEN'
+      example: 'WOMAN'
 
     ErrorResponse:
       type: object

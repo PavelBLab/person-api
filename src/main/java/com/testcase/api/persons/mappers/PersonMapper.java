@@ -16,7 +16,6 @@ public interface PersonMapper {
     List<PersonDto> mapToShortPersonDtos(final List<Person> persons);
 
     @Named("mapToShortPersonDto")
-    @Mapping(target = "id", ignore = true)
     PersonDto mapToShortPersonDto(final Person persons);
 
     PersonDto mapToPersonDto(final Person person);
