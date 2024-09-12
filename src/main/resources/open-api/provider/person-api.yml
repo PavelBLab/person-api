@@ -1,0 +1,389 @@
+openapi: 3.0.3
+info:
+  title: 'Person API'
+  version: '0.0.1'
+  description: |
+    'This API allows retrieving persons. The Person API provides endpoints to interact with the person data stored in our system. 
+    The API supports operations to retrieve detailed information about individual persons or a comprehensive list of all persons. 
+    This can be useful for a variety of applications including user interfaces, reporting, data analysis, and integration with other systems.
+
+    The API follows RESTful principles and is designed to be simple to use, yet powerful enough to handle complex use cases. 
+    The data returned by the API includes extensive details about each person, such as their unique identifier, name, surname, date of birth, 
+    country of origin, job title, address, arrival date, and associated documents. This level of detail ensures that the API can support a wide range of functionalities 
+    and use cases, from simple lookups to comprehensive data processing tasks.
+
+    The API is designed with flexibility and ease of integration in mind, allowing developers to easily incorporate person data into their applications. 
+    Each endpoint is documented with comprehensive examples and descriptions to facilitate quick understanding and implementation.
+
+    Common use cases for the Person API include:
+    - Displaying person data in user interfaces, such as profile pages or contact lists
+    - Populating dropdowns or selection fields with person data
+    - Providing data for reporting and analytics
+    - Integrating person data with other systems or services
+    - Validating and processing person-related information'
+
+tags:
+  - name: Person
+    description: 'Operations related to persons'
+
+paths:
+
+  /persons:
+    get:
+      operationId: allPersons
+      tags:
+        - Person
+      summary: 'Retrieve a list of all persons'
+      description: |
+        'This endpoint returns a comprehensive list of all persons available in the database.
+        The data can be used for various purposes such as displaying in a dropdown for user selection,
+        providing data for reports, or populating person-specific information in your application.'
+      responses:
+        '200':
+          description: 'A list of persons'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PersonDto'
+              example:
+                - id: '046b6c7f-0b8a-43b9-b35d-6489e6daee91'
+                  name: 'John'
+                  surname: 'Doe'
+                  status: 'READY_FOR_INTERVIEW'
+                  confirmed: false
+        400: # Bad Request
+          description: 'Invalid request parameters'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        401: # Unauthorized
+          description: 'Authentication required'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        403: # Forbidden
+          description: 'Insufficient permissions'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500: # Internal Server Error
+          description: 'An unexpected error occurred'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
+  /persons/:
+    post:
+      operationId: createPerson
+      tags:
+        - Person
+      summary: 'Create a new person'
+      description: 'Endpoint to create a new person entry.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonDto'
+      responses:
+        201:
+          description: 'The person was created successfully'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonDto'
+        400:
+          description: 'Bad request, validation error or malformed input'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: 'Internal server error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
+  /persons/{personId}:
+    get:
+      operationId: onePerson
+      tags:
+        - Person
+      summary: 'Retrieve a specific person by ID'
+      description: |
+        'This endpoint returns detailed information about a specific person identified by their unique ID.
+        This can be useful for obtaining person-specific data for display, processing, or integration with other systems.'
+      parameters:
+        - $ref: '#/components/parameters/personId'
+      responses:
+        '200':
+          description: 'A single person'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonDto'
+              example:
+                id: '046b6c7f-0b8a-43b9-b35d-6489e6daee91'
+                name: 'John'
+                surname: 'Doe'
+                date_of_birth: '1990-01-01'
+                country: '046b6c7f-0b8a-43b9-b35d-6489e6daee91'
+                job_title: 'Software Engineer'
+                address: '123 Main St, Anytown, USA'
+                arrival_date: '2024-01-01'
+        400: # Bad Request
+          description: 'Invalid person ID supplied'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        401: # Unauthorized
+          description: 'Authentication required'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        403: # Forbidden
+          description: 'Insufficient permissions to access the person'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404: # Not Found
+          description: 'Person not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500: # Internal Server Error
+          description: 'An unexpected error occurred'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    patch:
+      operationId: updatePerson
+      tags:
+        - Person
+      summary: 'Update a specific person by ID'
+      description: |
+        'This endpoint returns detailed information about a specific person identified by their unique ID.
+        This can be useful for obtaining person-specific data for display, processing, or integration with other systems.'
+      parameters:
+        - $ref: '#/components/parameters/personId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonMiniDto'
+      responses:
+        '200':
+          description: 'A single person'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonDto'
+              example:
+                id: '046b6c7f-0b8a-43b9-b35d-6489e6daee91'
+                name: 'John'
+                surname: 'Doe'
+                date_of_birth: '1990-01-01'
+                country: '046b6c7f-0b8a-43b9-b35d-6489e6daee91'
+                job_title: 'Software Engineer'
+                address: '123 Main St, Anytown, USA'
+                arrival_date: '2024-01-01'
+        400: # Bad Request
+          description: 'Invalid person ID supplied'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        401: # Unauthorized
+          description: 'Authentication required'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        403: # Forbidden
+          description: 'Insufficient permissions to access the person'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404: # Not Found
+          description: 'Person not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500: # Internal Server Error
+          description: 'An unexpected error occurred'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+
+  parameters:
+    personId:
+      name: personId
+      in: path
+      required: true
+      description: 'The unique ID of the person to retrieve person dtos.'
+      schema:
+        type: string
+        format: uuid
+
+  schemas:
+
+    PersonMiniDto:
+      type: object
+      required:
+        - name
+        - surname
+        - dateOfBirth
+        - country
+        - jobTitle
+        - address
+      properties:
+        name:
+          type: string
+          nullable: false
+          description: 'The name of the person.'
+          example: 'John'
+        surname:
+          type: string
+          nullable: false
+          description: 'The surname of the person.'
+          example: 'Doe'
+        dateOfBirth:
+          type: string
+          format: date
+          nullable: false
+          description: |
+            'The date of birth of the person.
+            Format: YYYY-MM-DD'
+          example: '1990-01-01'
+        country:
+          type: string
+          nullable: false
+          description: 'The unique code of the country.'
+          example: 'UA'
+        jobTitle:
+          type: string
+          nullable: false
+          description: 'The job title of the person.'
+          example: 'Software Engineer'
+        address:
+          type: string
+          nullable: false
+          description: 'The address of the person.'
+          example: '123 Main St, Anytown, USA'
+        status:
+          $ref: '#/components/schemas/PersonStatus'
+        employer:
+          type: string
+        gender:
+          $ref: '#/components/schemas/PersonGender'
+
+    PersonDto:
+      type: object
+      required:
+        - id
+        - name
+        - surname
+        - dateOfBirth
+        - country
+        - jobTitle
+        - address
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: 'The unique ID of the person.'
+          example: '046b6c7f-0b8a-43b9-b35d-6489e6daee91'
+        name:
+          type: string
+          nullable: false
+          description: 'The name of the person.'
+          example: 'John'
+        surname:
+          type: string
+          nullable: false
+          description: 'The surname of the person.'
+          example: 'Doe'
+        dateOfBirth:
+          type: string
+          format: date
+          nullable: false
+          description: |
+            'The date of birth of the person.
+            Format: YYYY-MM-DD'
+          example: '1990-01-01'
+        country:
+          type: string
+          nullable: false
+          description: 'The unique code of the country.'
+          example: 'UA'
+        jobTitle:
+          type: string
+          nullable: false
+          description: 'The job title of the person.'
+          example: 'Software Engineer'
+        address:
+          type: string
+          nullable: false
+          description: 'The address of the person.'
+          example: '123 Main St, Anytown, USA'
+        status:
+          $ref: '#/components/schemas/PersonStatus'
+        employer:
+          type: string
+        gender:
+          $ref: '#/components/schemas/PersonGender'
+
+
+    PersonStatus:
+      type: string
+      enum:
+        - HEALTHCHECK_UPLOADED
+        - READY_FOR_INTERVIEW
+        - APPROVED
+        - VISA_ACQUIRED
+        - READY_FOR_DEPARTURE
+        - AT_CUSTOMER
+        - CERTIFICATE_OF_GOOD_CONDUCT_UPLOADED
+      description: 'Enum representing the status of a person.'
+      example: 'READY_FOR_INTERVIEW'
+
+    PersonGender:
+      type: string
+      enum:
+        - MAN
+        - WOMEN
+      description: 'Enum representing the gender of a person.'
+      example: 'WOMEN'
+
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: 'Error code.'
+          example: 400
+        message:
+          type: string
+          description: 'Error message.'
+          example: 'Invalid request parameters'
