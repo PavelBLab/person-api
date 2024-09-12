@@ -32,46 +32,95 @@
 
 	<properties>
 		<java.version>21</java.version>
-		<openapi-generator-maven-plugin.version>6.0.1</openapi-generator-maven-plugin.version>
+		<mapstruct.version>1.6.0</mapstruct.version>
+		<spring-boot-starter.version>3.3.3</spring-boot-starter.version>
+		<jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
+		<springdoc-openapi-ui.version>1.8.0</springdoc-openapi-ui.version>
+		<openapi-generator-maven-plugin.version>7.8.0</openapi-generator-maven-plugin.version>
+
+
 		<swagger.core.v3.version>2.2.1</swagger.core.v3.version>
 		<hibernate-validator.version>7.0.4.Final</hibernate-validator.version>
-		<jackson-databind-nullable.version>0.2.3</jackson-databind-nullable.version>
-		<springdoc-openapi-ui.version>1.6.9</springdoc-openapi-ui.version>
-		<mapstruct.version>1.5.2.Final</mapstruct.version>
+
+
 		<io.rest-assured.version>5.1.1</io.rest-assured.version>
 	</properties>
 
 	<dependencies>
 
+		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+			<version>${spring-boot-starter.version}</version>
 		</dependency>
 
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.boot</groupId>-->
-<!--			<artifactId>spring-boot-starter-data-jpa</artifactId>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+			<version>${spring-boot-starter.version}</version>
+		</dependency>
 
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.boot</groupId>-->
-<!--			<artifactId>spring-boot-docker-compose</artifactId>-->
-<!--			<scope>runtime</scope>-->
-<!--			<optional>true</optional>-->
-<!--		</dependency>-->
 
-<!--		<dependency>-->
-<!--			<groupId>org.postgresql</groupId>-->
-<!--			<artifactId>postgresql</artifactId>-->
-<!--			<scope>runtime</scope>-->
-<!--		</dependency>-->
+		<!-- Database -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-docker-compose</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+
+		<!-- Documentation-->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>${springdoc-openapi-ui.version}</version>
+		</dependency>
+
+
+		<!-- OpenApi -->
+		<dependency>
+			<groupId>org.openapitools</groupId>
+			<artifactId>jackson-databind-nullable</artifactId>
+			<version>${jackson-databind-nullable.version}</version>
+		</dependency>
+
+
+		<!-- General -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
 
+
+		<!-- Mapper -->
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+			<version>${mapstruct.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct-processor</artifactId>
+			<version>${mapstruct.version}</version>
+		</dependency>
+
+
+		<!-- Testing -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -120,6 +169,48 @@
 					</excludes>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.openapitools</groupId>
+				<artifactId>openapi-generator-maven-plugin</artifactId>
+				<version>${openapi-generator-maven-plugin.version}</version>
+				<inherited>false</inherited>
+				<configuration>
+					<generatorName>spring</generatorName>
+					<library>spring-boot</library>
+					<configOptions>
+						<useSpringBoot3>true</useSpringBoot3>
+						<immutableModels>true</immutableModels>
+<!--						<useBeanValidation>true</useBeanValidation>-->
+<!--						<performBeanValidation>true</performBeanValidation>-->
+						<interfaceOnly>true</interfaceOnly>
+						<skipDefaultInterface>true</skipDefaultInterface>
+						<validateSpec>false</validateSpec>
+						<useTags>true</useTags>
+						<sourceFolder>src/main/java</sourceFolder>
+						<additionalModelTypeAnnotations>
+							@lombok.experimental.SuperBuilder
+							@lombok.NoArgsConstructor
+							@lombok.Data
+							@lombok.extern.jackson.Jacksonized
+						</additionalModelTypeAnnotations>
+					</configOptions>
+				</configuration>
+				<executions>
+					<execution>
+						<id>persons-api</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>${project.basedir}/src/main/resources/open-api/provider/person-api.yml</inputSpec>
+							<apiPackage>com.testcase.api.persons.provider.controllers</apiPackage>
+							<modelPackage>com.testcase.api.persons.provider.models</modelPackage>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
 
