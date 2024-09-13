@@ -43,4 +43,9 @@ public class PersonController implements PersonApi {
                 new ResponseEntity<>(personConverter.updateOne(personId, personMiniDto), OK);
     }
 
+    @Override
+    public ResponseEntity<Void> deletePerson(final UUID personId) {
+        personConverter.deleteOne(personId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

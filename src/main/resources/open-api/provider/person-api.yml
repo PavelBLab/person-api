@@ -281,6 +281,64 @@ paths:
                 code: 500
                 message: 'An unexpected error occurred.'
 
+    delete:
+      operationId: deletePerson
+      tags:
+        - Person
+      summary: 'Delete a specific person by ID.'
+      description: |
+        'This endpoint allows you to delete a person identified by their unique ID. Once deleted, the person cannot be recovered.'
+      parameters:
+        - $ref: '#/components/parameters/personIdParam'
+      responses:
+        204: # No Content
+          description: 'The person was successfully deleted. No content returned.'
+        400: # Bad Request
+          description: 'Invalid request parameters.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 400
+                message: 'Invalid request parameters.'
+        401: # Unauthorized
+          description: 'Authentication required.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 401
+                message: 'Authentication required.'
+        403: # Forbidden
+          description: 'Insufficient permissions.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 403
+                message: 'Insufficient permissions.'
+        404: # Not Found
+          description: 'Person not found.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 404
+                message: 'Person not found.'
+        500: # Internal Server Error
+          description: 'An unexpected error occurred.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 500
+                message: 'An unexpected error occurred.'
+
 
 components:
 

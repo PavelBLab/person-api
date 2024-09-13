@@ -24,7 +24,7 @@ public class PersonService {
         return personRepository.findAll(PersonSpecification.filterByParams(name, surname));
     }
 
-    public List<Person> getPersonsByRecordId(final UUID recordId, final String name, final String surname) {
+    public List<Person> getPersonsByRecordId(final String name, final String surname) {
         return personRepository.findAll(PersonSpecification.filterByParams(name, surname));
     }
 
@@ -81,6 +81,11 @@ public class PersonService {
         return mergeEntityResult(old);
 
     }
+
+    public void deleteOne(final UUID id) {
+        personRepository.deleteById(id);
+    }
+
 
     private Person mergeEntityResult(final Person person) {
         return personRepository.save(person);

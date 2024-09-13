@@ -39,4 +39,8 @@ public class PersonConverter {
         return personMapper.mapToPersonDto(personService.updateOne(personId, personMiniDto));
     }
 
+    public void  deleteOne(final UUID id) {
+        personService.deleteOne(id);
+    }
+
 }
