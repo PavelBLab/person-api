@@ -1,9 +1,9 @@
 services:
   postgres:
     container_name: postgres
-    image: postgres:16.4
+    image: postgres:16.4-alpine
     ports:
-      - 5434:5432
+      - 9000:5432
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./dev-scripts/init-person-db.sql:/docker-entrypoint-initdb.d/init.sql
