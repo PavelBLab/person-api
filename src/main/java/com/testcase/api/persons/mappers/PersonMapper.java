@@ -2,6 +2,7 @@ package com.testcase.api.persons.mappers;
 
 import com.testcase.api.persons.persistence.entities.Person;
 import com.testcase.api.persons.provider.models.PersonDto;
+import com.testcase.api.persons.provider.models.PersonMiniDto;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -20,6 +21,7 @@ public interface PersonMapper {
 
     PersonDto mapToPersonDto(final Person person);
 
-    Person mapToPerson(final PersonDto personDto);
+    @Mapping(target = "id", ignore = true)
+    Person mapToPerson(final PersonMiniDto personMiniDto);
 
 }

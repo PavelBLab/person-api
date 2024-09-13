@@ -1,10 +1,11 @@
 package com.testcase.api.persons.persistence.entities;
 
-import com.testcase.api.persons.provider.models.PersonGender;
-import com.testcase.api.persons.provider.models.PersonStatus;
+import com.testcase.api.persons.provider.models.CountryCode;
+import com.testcase.api.persons.provider.models.Gender;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
@@ -24,17 +25,17 @@ public class Person {
     private String name;
     private String surname;
     private LocalDate dateOfBirth;
-    private String country;
-    private String jobTitle;
     private String address;
 
     @Enumerated(EnumType.STRING)
-    private PersonStatus status;
+    private CountryCode country;
 
+    private String jobTitle;
+    private BigDecimal annualSalary;
     private String employer;
 
     @Enumerated(EnumType.STRING)
-    private PersonGender gender;
+    private Gender gender;
 
     @Override
     public boolean equals(Object o) {

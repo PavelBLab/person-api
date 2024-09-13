@@ -35,13 +35,10 @@
 		<mapstruct.version>1.6.0</mapstruct.version>
 		<spring-boot-starter.version>3.3.3</spring-boot-starter.version>
 		<jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
-		<springdoc-openapi-ui.version>1.8.0</springdoc-openapi-ui.version>
+		<springdoc-openapi-starter-webmvc-ui.version>2.6.0</springdoc-openapi-starter-webmvc-ui.version>
 		<openapi-generator-maven-plugin.version>7.8.0</openapi-generator-maven-plugin.version>
 		<liquibase-core.version>4.29.2</liquibase-core.version>
-
-<!--		<swagger.core.v3.version>2.2.1</swagger.core.v3.version>-->
-<!--		<hibernate-validator.version>7.0.4.Final</hibernate-validator.version>-->
-<!--		<io.rest-assured.version>5.1.1</io.rest-assured.version>-->
+		<testcontainers.version>1.19.6</testcontainers.version>
 	</properties>
 
 	<dependencies>
@@ -82,8 +79,8 @@
 		<!-- Documentation-->
 		<dependency>
 			<groupId>org.springdoc</groupId>
-			<artifactId>springdoc-openapi-ui</artifactId>
-			<version>${springdoc-openapi-ui.version}</version>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>${springdoc-openapi-starter-webmvc-ui.version}</version>
 		</dependency>
 
 
@@ -134,18 +131,22 @@
 		<dependency>
 			<groupId>org.testcontainers</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>1.19.6</version>
+			<version>${testcontainers.version}</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.testcontainers</groupId>
 			<artifactId>junit-jupiter</artifactId>
-			<version>1.19.6</version>
+			<version>${testcontainers.version}</version>
 			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.commons</groupId>
+					<artifactId>commons-compress</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
-
-
 	</dependencies>
 
 	<build>

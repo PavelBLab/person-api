@@ -27,8 +27,8 @@ public class PersonController implements PersonApi {
     }
 
     @Override
-    public ResponseEntity<PersonDto> createPerson(final PersonDto personIncomingDto) {
-        return new ResponseEntity<>(personConverter.createOne(personIncomingDto), CREATED);
+    public ResponseEntity<PersonDto> createPerson(final PersonMiniDto personMiniDto) {
+        return new ResponseEntity<>(personConverter.createOne(personMiniDto), CREATED);
     }
 
     @Override

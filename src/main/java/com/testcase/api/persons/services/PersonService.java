@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
-import static com.testcase.api.persons.validators.PersonStatusValidator.validatePersonStatus;
+import static com.testcase.api.persons.validators.GenderValidator.validatePersonStatus;
 
 
 @Service
@@ -49,30 +49,34 @@ public class PersonService {
             old.setSurname(personMiniDto.getSurname());
         }
 
-        if (personMiniDto.getCountry() != null) {
-            old.setCountry(personMiniDto.getCountry());
+        if (personMiniDto.getDateOfBirth() != null) {
+            old.setDateOfBirth(personMiniDto.getDateOfBirth());
         }
 
         if (personMiniDto.getAddress() != null) {
             old.setAddress(personMiniDto.getAddress());
         }
 
-
-        if (personMiniDto.getDateOfBirth() != null) {
-            old.setDateOfBirth(personMiniDto.getDateOfBirth());
+        if (personMiniDto.getCountry() != null) {
+            old.setCountry(personMiniDto.getCountry());
         }
 
         if (personMiniDto.getJobTitle() != null) {
             old.setJobTitle(personMiniDto.getJobTitle());
         }
 
-        if (personMiniDto.getStatus() != null) {
-            old.setStatus(personMiniDto.getStatus());
+        if (personMiniDto.getAnnualSalary() != null) {
+            old.setAnnualSalary(personMiniDto.getAnnualSalary());
         }
 
         if (personMiniDto.getEmployer() != null) {
             old.setEmployer(personMiniDto.getEmployer());
         }
+
+        if (personMiniDto.getGender() != null) {
+            old.setGender(personMiniDto.getGender());
+        }
+
 
         return mergeEntityResult(old);
 

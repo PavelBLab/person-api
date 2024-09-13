@@ -1,15 +1,15 @@
 openapi: 3.0.3
 info:
   title: 'Person API'
-  version: '0.0.1'
+  version: '0.1.0'
   description: |
-    'This API allows retrieving persons. The Person API provides endpoints to interact with the person data stored in our system. 
+    'This API allows retrieving persons. The Person API provides endpoints to interact with the person data stored in the system. 
     The API supports operations to retrieve detailed information about individual persons or a comprehensive list of all persons. 
     This can be useful for a variety of applications including user interfaces, reporting, data analysis, and integration with other systems.
 
     The API follows RESTful principles and is designed to be simple to use, yet powerful enough to handle complex use cases. 
     The data returned by the API includes extensive details about each person, such as their unique identifier, name, surname, date of birth, 
-    country of origin, job title, address, arrival date, and associated documents. This level of detail ensures that the API can support a wide range of functionalities 
+    address, country of origin, job title, etc. This level of detail ensures that the API can support a wide range of functionalities 
     and use cases, from simple lookups to comprehensive data processing tasks.
 
     The API is designed with flexibility and ease of integration in mind, allowing developers to easily incorporate person data into their applications. 
@@ -24,7 +24,7 @@ info:
 
 tags:
   - name: Person
-    description: 'Operations related to persons'
+    description: 'Operations related to persons.'
 
 paths:
 
@@ -33,53 +33,59 @@ paths:
       operationId: allPersons
       tags:
         - Person
-      summary: 'Retrieve a list of all persons'
+      summary: 'Retrieve a list of all persons.'
       description: |
         'This endpoint returns a comprehensive list of all persons available in the database.
         The data can be used for various purposes such as displaying in a dropdown for user selection,
         providing data for reports, or populating person-specific information in your application.'
       parameters:
-        - $ref: '#/components/parameters/person_name'
-        - $ref: '#/components/parameters/person_surname'
+        - $ref: '#/components/parameters/personNameParam'
+        - $ref: '#/components/parameters/personSurnameParam'
       responses:
-        '200':
-          description: 'A list of persons'
+        200:
+          description: 'A list of persons.'
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/PersonDto'
-              example:
-                - id: '046b6c7f-0b8a-43b9-b35d-6489e6daee91'
-                  name: 'John'
-                  surname: 'Doe'
-                  status: 'READY_FOR_INTERVIEW'
-                  confirmed: false
         400: # Bad Request
-          description: 'Invalid request parameters'
+          description: 'Invalid request parameters.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 400
+                message: 'Invalid request parameters.'
         401: # Unauthorized
-          description: 'Authentication required'
+          description: 'Authentication required.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 401
+                message: 'Authentication required.'
         403: # Forbidden
-          description: 'Insufficient permissions'
+          description: 'Insufficient permissions.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 403
+                message: 'Insufficient permissions.'
         500: # Internal Server Error
-          description: 'An unexpected error occurred'
+          description: 'An unexpected error occurred.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 500
+                message: 'An unexpected error occurred.'
 
 
   /persons/:
@@ -94,96 +100,128 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PersonDto'
+              $ref: '#/components/schemas/PersonMiniDto'
       responses:
         201:
-          description: 'The person was created successfully'
+          description: 'The person was created successfully.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/PersonDto'
-        400:
-          description: 'Bad request, validation error or malformed input'
+        400: # Bad Request
+          description: 'Invalid request parameters.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-        500:
-          description: 'Internal server error'
+              example:
+                code: 400
+                message: 'Invalid request parameters.'
+        401: # Unauthorized
+          description: 'Authentication required.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 401
+                message: 'Authentication required.'
+        403: # Forbidden
+          description: 'Insufficient permissions.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 403
+                message: 'Insufficient permissions.'
+        500: # Internal Server Error
+          description: 'An unexpected error occurred.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 500
+                message: 'An unexpected error occurred.'
 
 
-  /persons/{personId}:
+  /persons/{personIdParam}:
     get:
       operationId: onePerson
       tags:
         - Person
-      summary: 'Retrieve a specific person by ID'
+      summary: 'Retrieve a specific person by ID.'
       description: |
         'This endpoint returns detailed information about a specific person identified by their unique ID.
         This can be useful for obtaining person-specific data for display, processing, or integration with other systems.'
       parameters:
-        - $ref: '#/components/parameters/personId'
+        - $ref: '#/components/parameters/personIdParam'
       responses:
-        '200':
-          description: 'A single person'
+        200:
+          description: 'A single person.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/PersonDto'
-              example:
-                id: '046b6c7f-0b8a-43b9-b35d-6489e6daee91'
-                name: 'John'
-                surname: 'Doe'
-                date_of_birth: '1990-01-01'
-                country: '046b6c7f-0b8a-43b9-b35d-6489e6daee91'
-                job_title: 'Software Engineer'
-                address: '123 Main St, Anytown, USA'
-                arrival_date: '2024-01-01'
         400: # Bad Request
-          description: 'Invalid person ID supplied'
+          description: 'Invalid request parameters.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 400
+                message: 'Invalid request parameters.'
         401: # Unauthorized
-          description: 'Authentication required'
+          description: 'Authentication required.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 401
+                message: 'Authentication required.'
         403: # Forbidden
-          description: 'Insufficient permissions to access the person'
+          description: 'Insufficient permissions.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 403
+                message: 'Insufficient permissions.'
         404: # Not Found
-          description: 'Person not found'
+          description: 'Person not found.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 404
+                message: 'Person not found'
         500: # Internal Server Error
-          description: 'An unexpected error occurred'
+          description: 'An unexpected error occurred.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 500
+                message: 'An unexpected error occurred.'
+
+
 
     patch:
       operationId: updatePerson
       tags:
         - Person
-      summary: 'Update a specific person by ID'
+      summary: 'Update a specific person by ID.'
       description: |
-        'This endpoint returns detailed information about a specific person identified by their unique ID.
-        This can be useful for obtaining person-specific data for display, processing, or integration with other systems.'
+        'This endpoint allows updating the details of a person identified by their unique ID. 
+        It is useful for modifying person-specific data such as name, address, or other attributes for display, processing, or integration with external systems.'
       parameters:
-        - $ref: '#/components/parameters/personId'
+        - $ref: '#/components/parameters/personIdParam'
       requestBody:
         required: true
         content:
@@ -191,77 +229,86 @@ paths:
             schema:
               $ref: '#/components/schemas/PersonMiniDto'
       responses:
-        '200':
-          description: 'A single person'
+        200:
+          description: 'A single person.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/PersonDto'
-              example:
-                id: '046b6c7f-0b8a-43b9-b35d-6489e6daee91'
-                name: 'John'
-                surname: 'Doe'
-                date_of_birth: '1990-01-01'
-                country: '046b6c7f-0b8a-43b9-b35d-6489e6daee91'
-                job_title: 'Software Engineer'
-                address: '123 Main St, Anytown, USA'
-                arrival_date: '2024-01-01'
         400: # Bad Request
-          description: 'Invalid person ID supplied'
+          description: 'Invalid request parameters.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 400
+                message: 'Invalid request parameters.'
         401: # Unauthorized
-          description: 'Authentication required'
+          description: 'Authentication required.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 401
+                message: 'Authentication required.'
         403: # Forbidden
-          description: 'Insufficient permissions to access the person'
+          description: 'Insufficient permissions.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 403
+                message: 'Insufficient permissions.'
         404: # Not Found
-          description: 'Person not found'
+          description: 'Person not found.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 404
+                message: 'Person not found.'
         500: # Internal Server Error
-          description: 'An unexpected error occurred'
+          description: 'An unexpected error occurred.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 500
+                message: 'An unexpected error occurred.'
+
 
 components:
 
   parameters:
-    personId:
-      name: personId
+
+    personIdParam:
+      name: personIdParam
       in: path
       required: true
-      description: 'The unique ID of the person to retrieve person dtos.'
+      description: 'The unique ID of the person whose details are being accessed or modified.'
       schema:
         type: string
         format: uuid
 
-    person_name:
-      name: person_name
+    personNameParam:
+      name: personNameParam
       in: query
-      description: A person first name for searching purpose.
+      description: 'The first name of the person, used to filter or search for specific records.'
       schema:
         type: string
 
-    person_surname:
-      name: person_surname
+    personSurnameParam:
+      name: personSurnameParam
       in: query
-      description: A person last name for searching purpose.
+      description: 'The last name of the person, used to filter or search for specific records.'
       schema:
         type: string
+
 
   schemas:
 
@@ -271,9 +318,9 @@ components:
         - name
         - surname
         - dateOfBirth
+        - address
         - country
         - jobTitle
-        - address
       properties:
         name:
           type: string
@@ -293,27 +340,27 @@ components:
             'The date of birth of the person.
             Format: YYYY-MM-DD'
           example: '1990-01-01'
-        country:
-          type: string
-          nullable: false
-          description: 'The unique code of the country.'
-          example: 'UA'
-        jobTitle:
-          type: string
-          nullable: false
-          description: 'The job title of the person.'
-          example: 'Software Engineer'
         address:
           type: string
           nullable: false
           description: 'The address of the person.'
           example: '123 Main St, Anytown, USA'
-        status:
-          $ref: '#/components/schemas/PersonStatus'
+        country:
+          $ref: '#/components/schemas/CountryCode'
+        jobTitle:
+          type: string
+          nullable: false
+          description: 'The job title of the person.'
+          example: 'Software Engineer'
+        annualSalary:
+          type: number
+          description: "A BigDecimal field representing an annual amount."
+          example: 100000.00
         employer:
           type: string
         gender:
-          $ref: '#/components/schemas/PersonGender'
+          $ref: '#/components/schemas/Gender'
+
 
     PersonDto:
       type: object
@@ -322,9 +369,9 @@ components:
         - name
         - surname
         - dateOfBirth
+        - address
         - country
         - jobTitle
-        - address
       properties:
         id:
           type: string
@@ -349,49 +396,61 @@ components:
             'The date of birth of the person.
             Format: YYYY-MM-DD'
           example: '1990-01-01'
-        country:
+        address:
           type: string
           nullable: false
-          description: 'The unique code of the country.'
-          example: 'UA'
+          description: 'The address of the person.'
+          example: '123 Main St, Anytown'
+        country:
+          $ref: '#/components/schemas/CountryCode'
         jobTitle:
           type: string
           nullable: false
           description: 'The job title of the person.'
           example: 'Software Engineer'
-        address:
-          type: string
-          nullable: false
-          description: 'The address of the person.'
-          example: '123 Main St, Anytown, USA'
-        status:
-          $ref: '#/components/schemas/PersonStatus'
+        annualSalary:
+          type: number
+          description: "A BigDecimal field representing an annual amount."
+          example: 100000.00
         employer:
           type: string
+          description: 'A person employer.'
+          example: 'Abn-Amro'
         gender:
-          $ref: '#/components/schemas/PersonGender'
+          $ref: '#/components/schemas/Gender'
 
 
-    PersonStatus:
+    CountryCode:
       type: string
+      x-enum-varnames:
+        - US
+        - DE
+        - NL
+        - CY
+        - IT
+        - UK
+        - OTHER
       enum:
-        - HEALTHCHECK_UPLOADED
-        - READY_FOR_INTERVIEW
-        - APPROVED
-        - VISA_ACQUIRED
-        - READY_FOR_DEPARTURE
-        - AT_CUSTOMER
-        - CERTIFICATE_OF_GOOD_CONDUCT_UPLOADED
-      description: 'Enum representing the status of a person.'
-      example: 'READY_FOR_INTERVIEW'
+        - United States
+        - Germany
+        - Netherlands
+        - Cyprus
+        - Italy
+        - United Kingdom
+        - Other
+      description: 'Enum representing a country where a person resides.'
+      example: 'US'
 
-    PersonGender:
+
+    Gender:
       type: string
       enum:
         - MAN
         - WOMAN
+        - NA
       description: 'Enum representing the gender of a person.'
-      example: 'WOMAN'
+      example: 'MAN'
+
 
     ErrorResponse:
       type: object
@@ -403,4 +462,4 @@ components:
         message:
           type: string
           description: 'Error message.'
-          example: 'Invalid request parameters'
+          example: 'Invalid request parameters.'

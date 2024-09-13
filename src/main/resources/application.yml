@@ -1,6 +1,7 @@
 spring:
   application:
     name: person-api
+
   jpa:
     show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -10,16 +11,24 @@ spring:
         jdbc:
           lob:
             non_contextual_creation: true
+
   liquibase:
     change-log: classpath:liquibase/master.yml
     default-schema: person
     enabled: true
 
+---
+springdoc:
+  swagger-ui:
+    path: /person-api-documentation
+
+---
 management:
   endpoints:
     web:
       exposure:
         include: mappings, health, info, beans # "*"
+
   endpoint:
     health:
       show-details: "always"

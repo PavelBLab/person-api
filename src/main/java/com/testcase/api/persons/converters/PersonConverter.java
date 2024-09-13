@@ -24,10 +24,10 @@ public class PersonConverter {
         );
     }
 
-    public PersonDto createOne(final PersonDto personDto) {
+    public PersonDto createOne(final PersonMiniDto personMiniDto) {
         return personMapper
                 .mapToPersonDto(
-                        personService.createOne(personMapper.mapToPerson(personDto))
+                        personService.createOne(personMapper.mapToPerson(personMiniDto))
                 );
     }
 
