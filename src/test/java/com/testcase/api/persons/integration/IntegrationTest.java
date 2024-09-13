@@ -25,7 +25,7 @@ public abstract class IntegrationTest {
             .withInitScript("init-db.sql");
 
     @DynamicPropertySource
-    static void configureProperties(DynamicPropertyRegistry registry){
+    static void configureProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", postgres::getJdbcUrl);
         registry.add("spring.datasource.username", postgres::getUsername);
         registry.add("spring.datasource.password", postgres::getPassword);

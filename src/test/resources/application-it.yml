@@ -1,0 +1,5 @@
+logging:
+  level:
+    org.springframework.test.web.servlet: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.http: DEBUG

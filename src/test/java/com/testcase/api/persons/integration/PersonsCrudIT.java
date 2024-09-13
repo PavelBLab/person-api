@@ -1,32 +1,25 @@
 package com.testcase.api.persons.integration;
 
-import com.testcase.api.persons.PersonsApplication;
-import com.testcase.api.persons.persistence.entities.Person;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testcase.api.persons.persistence.repositories.PersonRepository;
-import com.testcase.api.persons.provider.models.PersonGender;
-import com.testcase.api.persons.provider.models.PersonStatus;
+import lombok.val;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
-import org.testcontainers.containers.JdbcDatabaseContainer;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-
-import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
+
+import static com.testcase.api.persons.utils.TestDataFactory.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 class PersonsCrudIT extends IntegrationTest {
@@ -37,19 +30,155 @@ class PersonsCrudIT extends IntegrationTest {
     @Autowired
     PersonRepository personRepository;
 
+    @Autowired
+    private ObjectMapper objectMapper; // For converting objects to JSON
+
     @BeforeEach
     void setUp() {
         personRepository.deleteAll();
-        personRepository.save(new Person(UUID.randomUUID(), "Brad", "Pitt", LocalDate.of(1980, 01, 01), "US", "Actor", null, PersonStatus.APPROVED, "Abn-Amro", PersonGender.MAN));
+
+        val persons = List.of(PERSON_1, PERSON_2);
+        personRepository.saveAll(persons);
     }
 
     @Test
     void allPersons() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get("/persons"))
+        mockMvc.perform(get("/persons"))
+                .andDo(MockMvcResultHandlers.print())
                 .andExpectAll(
-                        status().is(200),
-                        jsonPath("$", hasSize(1))
-                )
+                        status().isOk(),
+                        jsonPath("$", hasSize(2)),
+                        jsonPath("$[0].name").value("Johnny")
+                ).andReturn();
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "personNameParam, Louis, Louis, Armstrong",
+            "personSurnameParam, Depp, Johnny, Depp"
+    })
+    void allPersons_UseFiler(String paramName, String paramValue, String name, String surname) throws Exception {
+        mockMvc.perform(get("/persons")
+                        .param(paramName, paramValue))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$", hasSize(1)),
+                        jsonPath("$[0].name").value(name),
+                        jsonPath("$[0].surname").value(surname)
+                ).andReturn();
+    }
+
+
+    @Test
+    void createPerson() throws Exception {
+        val personJson = objectMapper.writeValueAsString(PERSON_1);
+
+        mockMvc.perform(
+                        post("/persons/")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(personJson))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpectAll(
+                        status().isCreated(),
+                        jsonPath("name").value("Johnny"),
+                        jsonPath("surname").value("Depp")
+                ).andReturn();
+    }
+
+    @Test
+    void onePerson() throws Exception {
+        val personId = String.valueOf(personRepository.findAll().get(0).getId());
+
+        mockMvc.perform(get("/persons/{personId}", personId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("name").value("Johnny"),
+                        jsonPath("surname").value("Depp")
+                ).andReturn();
+    }
+
+    @Test
+    void onePerson_Throw404() throws Exception {
+        val personId = UUID.randomUUID();
+
+        mockMvc.perform(get("/persons/{personId}", personId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpectAll(
+                        status().isNotFound(),
+                        jsonPath("$.code").value(404),
+                        jsonPath("$.message").value("Person with ID " + personId + " not found"))
+                .andReturn();
+    }
+
+    @Test
+    void updatePerson() throws Exception {
+        val personId = String.valueOf(personRepository.findAll().get(0).getId());
+        val updatedPersonJson = objectMapper.writeValueAsString(UPDATED_PERSON);
+
+        mockMvc.perform(
+                        patch("/persons/{personId}", personId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(updatedPersonJson))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("name").value("Nina"),
+                        jsonPath("surname").value("Simone")
+                ).andReturn();
+    }
+
+    @Test
+    void updatePerson_Throw404() throws Exception {
+        val personId = UUID.randomUUID();
+        val updatedPersonJson = objectMapper.writeValueAsString(UPDATED_PERSON);
+
+        mockMvc.perform(
+                        patch("/persons/{personId}", personId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(updatedPersonJson))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpectAll(
+                        status().isNotFound(),
+                        jsonPath("$.code").value(404),
+                        jsonPath("$.message").value("Person with ID " + personId + " not found"))
+                .andReturn();
+    }
+
+    @Test
+    void deletePerson() throws Exception {
+        val personId = String.valueOf(personRepository.findAll().get(0).getId());
+
+        mockMvc.perform(delete("/persons/{personId}", personId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpectAll(status().isNoContent())
+                .andReturn();
+
+        mockMvc.perform(get("/persons/{personId}", personId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpectAll(
+                        status().isNotFound(),
+                        jsonPath("$.code").value(404),
+                        jsonPath("$.message").value("Person with ID " + personId + " not found"))
+                .andReturn();
+    }
+
+    @Test
+    void deletePerson_Throw404() throws Exception {
+        val personId = UUID.randomUUID();
+
+        mockMvc.perform(delete("/persons/{personId}", personId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpectAll(
+                        status().isNotFound(),
+                        jsonPath("$.code").value(404),
+                        jsonPath("$.message").value("Person with ID " + personId + " not found"))
                 .andReturn();
     }
 

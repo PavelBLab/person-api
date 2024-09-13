@@ -1,5 +1,6 @@
 package com.testcase.api.persons.services;
 
+import com.testcase.api.persons.exceptions.PersonNotFoundException;
 import com.testcase.api.persons.persistence.entities.Person;
 import com.testcase.api.persons.persistence.repositories.PersonRepository;
 import com.testcase.api.persons.persistence.repositories.specifications.PersonSpecification;
@@ -24,22 +25,18 @@ public class PersonService {
         return personRepository.findAll(PersonSpecification.filterByParams(name, surname));
     }
 
-    public List<Person> getPersonsByRecordId(final String name, final String surname) {
-        return personRepository.findAll(PersonSpecification.filterByParams(name, surname));
-    }
-
     public Person createOne(final Person person) {
         return mergeEntityResult(validatePersonStatus(person));
     }
 
     public Person getOne(final UUID id) {
-        return personRepository.findById(id).orElse(Person.builder().build());
+        return personRepository.findById(id).orElseThrow(() -> new PersonNotFoundException(id));
     }
 
     @Transactional
     public Person updateOne(final UUID id, final PersonMiniDto personMiniDto) {
 
-        Person old = getOne(id);
+        var old = getOne(id);
 
         if (personMiniDto.getName() != null) {
             old.setName(personMiniDto.getName());
@@ -79,10 +76,12 @@ public class PersonService {
 
 
         return mergeEntityResult(old);
-
     }
 
     public void deleteOne(final UUID id) {
+        if (!personRepository.existsById(id)) {
+            throw new PersonNotFoundException(id);
+        }
         personRepository.deleteById(id);
     }
 
