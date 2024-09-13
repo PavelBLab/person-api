@@ -17,6 +17,10 @@ spring:
     default-schema: person
     enabled: true
 
+  docker:
+    compose:
+      enabled: false
+
 ---
 springdoc:
   swagger-ui:
