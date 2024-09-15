@@ -1,0 +1,32 @@
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:16.4
+    ports:
+      - 5480:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./dev-scripts/init-person-db.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      POSTGRES_DB: testcase
+      POSTGRES_PASSWORD: postgres
+
+  person-service:
+    container_name: person-service
+#    image: person-local:latest
+    build: .
+    ports:
+      - 8080:8080
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_DATASOURCE_NAME: org.postgresql.Driver
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/testcase?currentSchema=person&useUnicode=true&characterEncoding=UTF8
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    depends_on:
+      postgres:
+        condition: service_started
+
+volumes:
+  postgres_data:
+    external: false
