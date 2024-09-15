@@ -35,6 +35,7 @@
 		<mapstruct.version>1.6.0</mapstruct.version>
 		<spring-boot-starter.version>3.3.3</spring-boot-starter.version>
 		<jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
+		<hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
 		<springdoc-openapi-starter-webmvc-ui.version>2.6.0</springdoc-openapi-starter-webmvc-ui.version>
 		<openapi-generator-maven-plugin.version>7.8.0</openapi-generator-maven-plugin.version>
 		<liquibase-core.version>4.29.2</liquibase-core.version>
@@ -91,6 +92,18 @@
 			<groupId>org.openapitools</groupId>
 			<artifactId>jackson-databind-nullable</artifactId>
 			<version>${jackson-databind-nullable.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${hibernate-validator.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>jboss-logging</artifactId>
+					<groupId>org.jboss.logging</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 
@@ -206,12 +219,13 @@
 				<inherited>false</inherited>
 				<configuration>
 					<generatorName>spring</generatorName>
+					<generateSupportingFiles>true</generateSupportingFiles>
 					<library>spring-boot</library>
 					<configOptions>
 						<useSpringBoot3>true</useSpringBoot3>
 						<immutableModels>true</immutableModels>
-<!--						<useBeanValidation>true</useBeanValidation>-->
-<!--						<performBeanValidation>true</performBeanValidation>-->
+						<useBeanValidation>true</useBeanValidation>
+						<performBeanValidation>true</performBeanValidation>
 						<interfaceOnly>true</interfaceOnly>
 						<skipDefaultInterface>true</skipDefaultInterface>
 						<validateSpec>false</validateSpec>
