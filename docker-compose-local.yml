@@ -1,6 +1,8 @@
+name: person-api-local
+
 services:
   postgres:
-    container_name: postgres
+    container_name: postgres-local
     image: postgres:16.4
     ports:
       - 9000:5432
