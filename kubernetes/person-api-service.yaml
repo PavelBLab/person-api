@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: person-api-service
+  namespace: person-api-local
+  labels:
+    app: person-api-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: person-api-deployment
+  ports:
+    - name: person-http
+      port: 18080
+      targetPort: 8080

@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: dockerhub-registry
+  namespace: person-api-local
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: ewogICJhdXRocyI6IHsKICAgICJodHRwczovL2luZGV4LmRvY2tlci5pby92MS8iOiB7CiAgICAgICJhdXRoIjogImNHRjJaV3hpY2pNMk9EcGtZMnR5WDNCaGRGOWZjR2xUU0VkMVQzVk1VbU51ZDBGUlpYaENNV3RDTjFKWU4wMD0iCiAgICB9CiAgfQp9Cg==
