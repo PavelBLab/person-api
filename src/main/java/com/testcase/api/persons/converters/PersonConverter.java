@@ -5,7 +5,9 @@ import com.testcase.api.persons.provider.models.PersonDto;
 import com.testcase.api.persons.provider.models.PersonMiniDto;
 import com.testcase.api.persons.services.PersonService;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -35,8 +37,13 @@ public class PersonConverter {
         return personMapper.mapToPersonDto(personService.getOne(personId));
     }
 
+
+    @Transactional
     public PersonDto updateOne(final UUID personId, final PersonMiniDto personMiniDto) {
-        return personMapper.mapToPersonDto(personService.updateOne(personId, personMiniDto));
+        val oldPerson = personService.getOne(personId);
+        personMapper.updatePersonFromPersonMiniDto(personMiniDto, oldPerson);
+
+        return personMapper.mapToPersonDto(personService.updateOne(oldPerson));
     }
 
     public void  deleteOne(final UUID id) {

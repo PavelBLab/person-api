@@ -1,6 +1,7 @@
 package com.testcase.api.persons.services;
 
 import com.testcase.api.persons.exceptions.PersonNotFoundException;
+import com.testcase.api.persons.mappers.PersonMapper;
 import com.testcase.api.persons.persistence.entities.Person;
 import com.testcase.api.persons.persistence.repositories.PersonRepository;
 import com.testcase.api.persons.persistence.repositories.specifications.PersonSpecification;
@@ -20,6 +21,7 @@ import static com.testcase.api.persons.validators.GenderValidator.validatePerson
 public class PersonService {
 
     private final PersonRepository personRepository;
+    private final PersonMapper personMapper;
 
     public List<Person> getAllPersons(final String name, final String surname) {
         return personRepository.findAll(PersonSpecification.filterByParams(name, surname));
@@ -33,49 +35,8 @@ public class PersonService {
         return personRepository.findById(id).orElseThrow(() -> new PersonNotFoundException(id));
     }
 
-    @Transactional
-    public Person updateOne(final UUID id, final PersonMiniDto personMiniDto) {
-
-        var old = getOne(id);
-
-        if (personMiniDto.getName() != null) {
-            old.setName(personMiniDto.getName());
-        }
-
-        if (personMiniDto.getSurname() != null) {
-            old.setSurname(personMiniDto.getSurname());
-        }
-
-        if (personMiniDto.getDateOfBirth() != null) {
-            old.setDateOfBirth(personMiniDto.getDateOfBirth());
-        }
-
-        if (personMiniDto.getAddress() != null) {
-            old.setAddress(personMiniDto.getAddress());
-        }
-
-        if (personMiniDto.getCountry() != null) {
-            old.setCountry(personMiniDto.getCountry());
-        }
-
-        if (personMiniDto.getJobTitle() != null) {
-            old.setJobTitle(personMiniDto.getJobTitle());
-        }
-
-        if (personMiniDto.getAnnualSalary() != null) {
-            old.setAnnualSalary(personMiniDto.getAnnualSalary());
-        }
-
-        if (personMiniDto.getEmployer() != null) {
-            old.setEmployer(personMiniDto.getEmployer());
-        }
-
-        if (personMiniDto.getGender() != null) {
-            old.setGender(personMiniDto.getGender());
-        }
-
-
-        return mergeEntityResult(old);
+    public Person updateOne(final Person updatedPerson) {
+        return mergeEntityResult(updatedPerson);
     }
 
     public void deleteOne(final UUID id) {

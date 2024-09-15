@@ -3,10 +3,7 @@ package com.testcase.api.persons.mappers;
 import com.testcase.api.persons.persistence.entities.Person;
 import com.testcase.api.persons.provider.models.PersonDto;
 import com.testcase.api.persons.provider.models.PersonMiniDto;
-import org.mapstruct.IterableMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
+import org.mapstruct.*;
 
 import java.util.List;
 
@@ -23,5 +20,9 @@ public interface PersonMapper {
 
     @Mapping(target = "id", ignore = true)
     Person mapToPerson(final PersonMiniDto personMiniDto);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "id", ignore = true)
+    void updatePersonFromPersonMiniDto(PersonMiniDto personMiniDto, @MappingTarget Person person);
 
 }
