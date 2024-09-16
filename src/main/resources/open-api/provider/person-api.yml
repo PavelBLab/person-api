@@ -516,7 +516,7 @@ components:
 
     CountryCode:
       type: string
-      x-enum-varnames:
+      enum:
         - US
         - DE
         - NL
@@ -524,14 +524,6 @@ components:
         - IT
         - UK
         - OTHER
-      enum:
-        - United States
-        - Germany
-        - Netherlands
-        - Cyprus
-        - Italy
-        - United Kingdom
-        - Other
       description: 'Enum representing a country where a person resides.'
       example: 'US'
 
