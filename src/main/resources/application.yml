@@ -44,13 +44,3 @@ management:
   endpoint:
     health:
       show-details: "always"
-
-#---
-#logging:
-#  level:
-#    com:
-#      testcase:
-#        api:
-#          persons: INFO
-
-
