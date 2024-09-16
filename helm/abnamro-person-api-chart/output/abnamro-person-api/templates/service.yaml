@@ -1,0 +1,24 @@
+---
+# Source: abnamro-person-api/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: abnamro-person-api
+  labels:
+    helm.sh/chart: abnamro-person-api-0.1.2
+    app: abnamro-person-api
+    app.kubernetes.io/name: abnamro-person-api
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 18080
+      targetPort: 8080
+      protocol: TCP
+      name: http
+  selector:
+    app: abnamro-person-api
+    app.kubernetes.io/name: abnamro-person-api
+    app.kubernetes.io/instance: release-name

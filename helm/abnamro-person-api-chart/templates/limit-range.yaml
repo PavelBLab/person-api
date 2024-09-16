@@ -1,0 +1,21 @@
+# The LimitRange resource in Kubernetes applies to all Pods and containers within a specific namespace.
+# It does not apply to nodes directly.
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: {{ include "abnamro-person-api-chart.fullname" . }}-limit-range
+spec:
+  limits:
+    - default: # Sets the default CPU and Memory limit for containers to 100m (100 millicores) and 500mb respectively
+        cpu: {{ .Values.limitRange.default.cpu }}
+        memory: {{ .Values.limitRange.default.memory }}
+      defaultRequest: # Sets the default CPU request for containers to 100m (100 millicores) and 500mb respectively
+        cpu: {{ .Values.limitRange.defaultRequest.cpu }}
+        memory: {{ .Values.limitRange.defaultRequest.memory }}
+      max: # Sets the maximum allowed CPU limit for containers to 0.5 core and 600mb respectively
+        cpu: {{ .Values.limitRange.max.cpu }}
+        memory: {{ .Values.limitRange.max.memory }}
+      min: # Sets the minimum allowed CPU limit for containers to 50m (50 millicores) and 400mb respectively
+        cpu: {{ .Values.limitRange.min.cpu }}
+        memory: {{ .Values.limitRange.min.memory }}
+      type: {{ .Values.limitRange.type }}

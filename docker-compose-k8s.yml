@@ -1,9 +1,11 @@
+name: person-api-k8s
+
 services:
   postgres:
     container_name: postgres
     image: postgres:16.4
     ports:
-      - 5480:5432
+      - 6000:5432
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./dev-scripts/init-person-db.sql:/docker-entrypoint-initdb.d/init.sql

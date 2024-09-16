@@ -1,0 +1,116 @@
+# Default values for abnamro-person-api-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# General
+fullnameOverride: "abnamro-person-api" # metadata name
+nameOverride: "abnamro-person-api"
+labels: {}
+
+# Deployment
+deployment:
+  replicaCount: 3
+
+  image:
+    repository: pavelbr368/abnamro-person-api
+    pullPolicy: Always
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: 0.1.2
+
+  imagePullSecrets:
+    - name: abnamro-person-api-dockerhub-registry
+
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+
+  envs:
+    - name: SPRING_DATASOURCE_URL
+      valueFrom:
+        secretKeyRef:
+          name: abnamro-person-api-db-secret
+          key: DB_URL
+    - name: SPRING_DATASOURCE_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: abnamro-person-api-db-secret
+          key: DB_USERNAME
+    - name: SPRING_DATASOURCE_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: abnamro-person-api-db-secret
+          key: DB_PASSWORD
+
+  resources:
+    requests:
+      memory: 400Mi
+      cpu: 0.2
+    limits:
+      memory: 600Mi
+      cpu: 0.5
+
+  livenessProbe:
+    httpGet:
+      path: /actuator/health/liveness
+      port: 8080
+    initialDelaySeconds: 10
+    periodSeconds: 5
+    failureThreshold: 9
+
+  readinessProbe:
+    httpGet:
+      path: /actuator/health/readiness
+      port: 8080
+    initialDelaySeconds: 10
+    periodSeconds: 5
+    failureThreshold: 9
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+
+    podAnnotations: {}
+    podLabels: {}
+    podSecurityContext: {}
+    securityContext: {}
+    volumes: []
+    volumeMounts: []
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+
+
+# Service
+service:
+  type: LoadBalancer
+  port: 18080
+  targetPort: 8080
+
+# Registry
+registry:
+  dockerConfigJson: ewogICJhdXRocyI6IHsKICAgICJodHRwczovL2luZGV4LmRvY2tlci5pby92MS8iOiB7CiAgICAgICJhdXRoIjogImNHRjJaV3hpY2pNMk9EcGtZMnR5WDNCaGRGOWZjR2xUU0VkMVQzVk1VbU51ZDBGUlpYaENNV3RDTjFKWU4wMD0iCiAgICB9CiAgfQp9Cg==
+
+# Secret
+secret:
+  dbUrl: amRiYzpwb3N0Z3Jlc3FsOi8vaG9zdC5kb2NrZXIuaW50ZXJuYWw6NjAwMC90ZXN0Y2FzZT9jdXJyZW50U2NoZW1hPXBlcnNvbiZ1c2VVbmljb2RlPXRydWUmY2hhcmFjdGVyRW5jb2Rpbmc9VVRGOA==
+  dbUserName: cG9zdGdyZXM=
+  dbPassword: cG9zdGdyZXM=
+
+limitRange:
+  default:
+    cpu: 100m
+    memory: 500Mi
+  defaultRequest:
+    cpu: 100m
+    memory: 500Mi
+  max:
+    cpu: 0.5
+    memory: 600Mi
+  min:
+    cpu: 50m
+    memory: 400Mi
+  type: Container
