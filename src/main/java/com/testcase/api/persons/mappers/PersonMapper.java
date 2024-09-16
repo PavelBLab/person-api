@@ -10,16 +10,16 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface PersonMapper {
 
-    @IterableMapping(qualifiedByName = "mapToShortPersonDto")
-    List<PersonDto> mapToShortPersonDtos(final List<Person> persons);
+    @IterableMapping(qualifiedByName = "mapToPersonDto")
+    List<PersonDto> mapToPersonDtos(final List<Person> persons);
 
-    @Named("mapToShortPersonDto")
-    PersonDto mapToShortPersonDto(final Person persons);
-
+    @Named("mapToPersonDto")
     PersonDto mapToPersonDto(final Person person);
 
     @Mapping(target = "id", ignore = true)
     Person mapToPerson(final PersonMiniDto personMiniDto);
+
+    Person mapToPerson(final PersonDto personDto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)

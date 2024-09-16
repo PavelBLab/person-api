@@ -5,8 +5,10 @@ import com.testcase.api.persons.mappers.PersonMapper;
 import com.testcase.api.persons.persistence.entities.Person;
 import com.testcase.api.persons.persistence.repositories.PersonRepository;
 import com.testcase.api.persons.persistence.repositories.specifications.PersonSpecification;
+import com.testcase.api.persons.provider.models.PersonDto;
 import com.testcase.api.persons.provider.models.PersonMiniDto;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,20 +25,34 @@ public class PersonService {
     private final PersonRepository personRepository;
     private final PersonMapper personMapper;
 
-    public List<Person> getAllPersons(final String name, final String surname) {
-        return personRepository.findAll(PersonSpecification.filterByParams(name, surname));
+    public List<PersonDto> getAllPersons(final String name, final String surname) {
+        val persons = personRepository.findAll(PersonSpecification.filterByParams(name, surname));
+        return personMapper.mapToPersonDtos(persons);
     }
 
-    public Person createOne(final Person person) {
-        return mergeEntityResult(validatePersonStatus(person));
+
+    public PersonDto getOne(final UUID id) {
+        val person = personRepository.findById(id).orElseThrow(() -> new PersonNotFoundException(id));
+        return personMapper.mapToPersonDto(person);
     }
 
-    public Person getOne(final UUID id) {
-        return personRepository.findById(id).orElseThrow(() -> new PersonNotFoundException(id));
+
+    public PersonDto createOne(final PersonMiniDto personMiniDto) {
+        val person = personMapper.mapToPerson(personMiniDto);
+        val persistedPerson = mergeEntityResult(validatePersonStatus(person));
+
+        return personMapper.mapToPersonDto(persistedPerson);
     }
 
-    public Person updateOne(final Person updatedPerson) {
-        return mergeEntityResult(updatedPerson);
+
+    @Transactional
+    public PersonDto updateOne(final UUID personId, final PersonMiniDto personMiniDto) {
+        val oldPerson = personMapper.mapToPerson(getOne(personId));
+        personMapper.updatePersonFromPersonMiniDto(personMiniDto, oldPerson);
+
+        val updatedPerson = mergeEntityResult(oldPerson);
+
+        return personMapper.mapToPersonDto(updatedPerson);
     }
 
     public void deleteOne(final UUID id) {
