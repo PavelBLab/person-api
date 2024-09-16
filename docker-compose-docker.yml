@@ -1,6 +1,8 @@
+name: person-api-docker
+
 services:
   postgres:
-    container_name: postgres
+    container_name: postgres-dev
     image: postgres:16.4
     ports:
       - 5480:5432
@@ -12,11 +14,11 @@ services:
       POSTGRES_PASSWORD: postgres
 
   person-service:
-    container_name: person-service
-#    image: person-local:latest
+    container_name: person-service-dev
+    image: pavelbr368/abnamro-person-api:0.1.2
     build: .
     ports:
-      - 8080:8080
+      - 9090:9091
     environment:
       SPRING_PROFILES_ACTIVE: dev
       SPRING_DATASOURCE_NAME: org.postgresql.Driver
