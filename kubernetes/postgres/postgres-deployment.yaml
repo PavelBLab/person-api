@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deployment
+  namespace: person-api-test
+  labels:
+    app: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-deployment
+  template:
+    metadata:
+      labels:
+        app: postgres-deployment
+        environment: test
+    spec:
+      containers:
+        - name: postgres-deployment
+          image: postgres:16.4
+          ports:
+            - containerPort: 5432
+          imagePullPolicy: Always
+          env:
+            - name: POSTGRES_DB
+              value: testcase
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: person-api-secret
+                  key: DB_USERNAME
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: person-api-secret
+                  key: DB_PASSWORD
+          volumeMounts:
+            - name: container-postgres-storage
+              mountPath: /var/lib/postgresql/data
+            - name: init-script
+              mountPath: /docker-entrypoint-initdb.d/init-db.sh
+              subPath: init-db.sh
+      volumes:
+        - name: container-postgres-storage
+          persistentVolumeClaim:
+            claimName: person-api-postgres-pvc
+        - name: init-script
+          configMap:
+            name: person-api-config-map # Use the script from the ConfigMap

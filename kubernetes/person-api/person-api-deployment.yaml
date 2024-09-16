@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: person-api-deployment
+  namespace: person-api-test
+  labels:
+    app: person-api-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: person-api-deployment
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: person-api-deployment
+        environment: test
+    spec:
+      imagePullSecrets:
+        - name: dockerhub-registry-secret
+      containers:
+        - name: person-api-container
+          image: pavelbr368/abnamro-person-api:0.1.2
+          ports:
+            - containerPort: 4001
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: 400Mi
+              cpu: 0.2
+            limits:
+              memory: 600Mi
+              cpu: 0.5
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 4001
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 8
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 4001
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 8
+          env:
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: person-api-secret
+                  key: DB_URL
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: person-api-secret
+                  key: DB_USERNAME
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: person-api-secret
+                  key: DB_PASSWORD
+            - name: SPRING_PROFILES_ACTIVE
+              valueFrom:
+                configMapKeyRef:
+                  name: person-api-config-map
+                  key: SPRING_PROFILES_ACTIVE
+            - name: SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: person-api-config-map
+                  key: SERVER_PORT
