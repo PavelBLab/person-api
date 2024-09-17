@@ -8,5 +8,4 @@ RUN ./mvnw -f $BUILD_DIR/pom.xml package
 
 FROM eclipse-temurin:21
 COPY --from=build /app-build/target/*.jar /app/application.jar
-EXPOSE 9091
 ENTRYPOINT java -jar /app/application.jar

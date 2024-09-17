@@ -10,23 +10,44 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: {{ include "abnamro-person-api-chart.fullname" . }}
-  minReplicas: {{ .Values.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.autoscaling.maxReplicas }}
+  minReplicas: {{ .Values.deployment.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.deployment.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.autoscaling.targetCPUUtilizationPercentage }}
+    {{- if .Values.deployment.autoscaling.targetCPUUtilizationPercentage }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}
+          averageUtilization: {{ .Values.deployment.autoscaling.targetCPUUtilizationPercentage }}
     {{- end }}
-    {{- if .Values.autoscaling.targetMemoryUtilizationPercentage }}
+    {{- if .Values.deployment.autoscaling.targetMemoryUtilizationPercentage }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}
+          averageUtilization: {{ .Values.deployment.autoscaling.targetMemoryUtilizationPercentage }}
     {{- end }}
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: {{ .Values.deployment.autoscaling.scaleDownStabilizationWindowSeconds }}
+      policies:
+        - type: Percent
+          value: {{ .Values.deployment.autoscaling.scaleDownPercentValue }}
+          periodSeconds: {{ .Values.deployment.autoscaling.scaleDownPercentPeriodSeconds }}
+        - type: Pods
+          value: {{ .Values.deployment.autoscaling.scaleDownPodsValue }}
+          periodSeconds: {{ .Values.deployment.autoscaling.scaleDownPodsPeriodSeconds }}
+      selectPolicy: {{ .Values.deployment.autoscaling.scaleDownSelectPolicy }}
+    scaleUp:
+      stabilizationWindowSeconds: {{ .Values.deployment.autoscaling.scaleUpStabilizationWindowSeconds }}
+      policies:
+        - type: Percent
+          value: {{ .Values.deployment.autoscaling.scaleUpPercentValue }}
+          periodSeconds: {{ .Values.deployment.autoscaling.scaleUpPercentPeriodSeconds }}
+        - type: Pods
+          value: {{ .Values.deployment.autoscaling.scaleUpPodsValue }}
+          periodSeconds: {{ .Values.deployment.autoscaling.scaleUpPodsPeriodSeconds }}
+      selectPolicy: {{ .Values.deployment.autoscaling.scaleUpSelectPolicy }}
 {{- end }}

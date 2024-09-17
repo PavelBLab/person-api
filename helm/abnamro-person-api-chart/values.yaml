@@ -68,10 +68,26 @@ deployment:
     failureThreshold: 9
 
   autoscaling:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 100
-    targetCPUUtilizationPercentage: 80
+    enabled: enable
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 60
+
+    # scaleDown
+    scaleDownStabilizationWindowSeconds: 10
+    scaleDownPercentValue: 40
+    scaleDownPercentPeriodSeconds: 15
+    scaleDownPodsValue: 1
+    scaleDownPodsPeriodSeconds: 15
+    scaleDownSelectPolicy: Max
+
+    # scaleUp
+    scaleUpStabilizationWindowSeconds: 10
+    scaleUpPercentValue: 40
+    scaleUpPercentPeriodSeconds: 15
+    scaleUpPodsValue: 1
+    scaleUpPodsPeriodSeconds: 15
+    scaleUpSelectPolicy: Min
 
     podAnnotations: {}
     podLabels: {}
@@ -114,3 +130,8 @@ limitRange:
     cpu: 50m
     memory: 400Mi
   type: Container
+
+hpa:
+  autoscaling:
+    minReplicas: 2
+    maxReplicas: 5

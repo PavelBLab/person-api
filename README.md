@@ -122,3 +122,37 @@ Error responses will follow this format:
   }
 }
 ```
+
+---
+
+## **Database SQL Structure**
+
+The **Person API** stores data in a relational database. The table `person.person` contains detailed information about each person, with the following structure:
+
+```sql
+CREATE TABLE IF NOT EXISTS person.person(
+    id            UUID         NOT NULL CONSTRAINT PK_person PRIMARY KEY,
+    name          VARCHAR(255) NOT NULL,
+    surname       VARCHAR(255) NOT NULL,
+    date_of_birth DATE NOT NULL,
+    address       VARCHAR(255),
+    country       VARCHAR(2) NOT NULL,
+    job_title     VARCHAR(255) NOT NULL,
+    annual_salary NUMERIC(19, 2),
+    employer      VARCHAR(255),
+    gender        VARCHAR(255) NOT NULL DEFAULT 'NA'
+);
+```
+
+### **Table Description:**
+
+- **`id`**: Unique identifier (UUID) for each person, which serves as the primary key.
+- **`name`**: The first name of the person (required).
+- **`surname`**: The last name of the person (required).
+- **`date_of_birth`**: The person's date of birth (required, in `YYYY-MM-DD` format).
+- **`address`**: Residential address of the person (optional).
+- **`country`**: Country of origin, represented by a two-letter country code (required).
+- **`job_title`**: The person's job title or role (required).
+- **`annual_salary`**: Annual salary of the person, stored as a numeric value with two decimal places (optional).
+- **`employer`**: Name of the person's employer or organization (optional).
+- **`gender`**: Gender of the person, with a default value of `'NA'` (required).
