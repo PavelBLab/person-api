@@ -1,2 +1,10 @@
 server:
-  port: 9091
+  port: 4001
+
+---
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}

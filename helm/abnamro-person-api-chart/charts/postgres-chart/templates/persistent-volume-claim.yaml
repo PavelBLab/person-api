@@ -1,0 +1,17 @@
+{{- if .Values.includePostgresChart }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "abnamro-person-api-chart.fullname" . }}
+  labels:
+    {{- include "abnamro-person-api-chart.labels" . | nindent 4 }}
+spec:
+  storageClassName: {{ .Values.storageClass.metadata.name }}
+  {{- with .Values.persistentVolume.spec.accessModes }}
+  accessModes:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.persistentVolumeClaim.spec.resources.requests.storage }}
+{{- end }}

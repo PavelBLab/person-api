@@ -87,14 +87,14 @@ The HPA will start monitoring the CPU usage of the `person-api` and automaticall
 To test the autoscaling capabilities of your setup, we will simulate load using the `k6` tool.
 
 ### **Steps:**
-1. Navigate to the load testing folder where the `load_test_case1.js` and `load_test_case2.js` script are located (load_test_case1.js for localhost:18080 and load_test_case2.js for localhost:20000):
+1. Navigate to the load testing folder where the `load_test_dev.js` and `load_test_test.js` script are located (load_test_dev.js for localhost:18080 and load_test_test.js for localhost:20000):
    ```
    cd load-testing
    ```
 
 2. Run the load test using `k6`:
    ```
-   k6 run load_test_case1.js
+   k6 run load_test_dev.js
    ```
 
 This will simulate requests to your `person-api`, increasing its CPU usage.
@@ -142,7 +142,7 @@ This will show the current CPU utilization, the target CPU threshold, and the nu
 
 5. **Run Load Test**:
    ```
-   k6 run load_test.js
+   k6 run load_test_dev.js
    ```
 
 6. **Watch HPA Scaling**:

@@ -1,1 +1,51 @@
 environment: dev
+
+# Service
+service:
+  type: LoadBalancer
+  port: 18080
+  targetPort: 4001
+
+# Deployment
+deployment:
+  livenessProbe:
+    httpGet:
+      path: /actuator/health/liveness
+      port: 4001
+    initialDelaySeconds: 10
+    periodSeconds: 5
+    failureThreshold: 9
+  readinessProbe:
+    httpGet:
+      path: /actuator/health/readiness
+      port: 4001
+    initialDelaySeconds: 10
+    periodSeconds: 5
+    failureThreshold: 9
+  envs:
+    - name: SPRING_PROFILES_ACTIVE
+      value: dev
+    - name: SPRING_DATASOURCE_URL
+      valueFrom:
+        secretKeyRef:
+          name: abnamro-person-api
+          key: DB_URL
+    - name: SPRING_DATASOURCE_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: abnamro-person-api
+          key: DB_USERNAME
+    - name: SPRING_DATASOURCE_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: abnamro-person-api
+          key: DB_PASSWORD
+
+# Secret
+secret:
+  dbUrl: amRiYzpwb3N0Z3Jlc3FsOi8vaG9zdC5kb2NrZXIuaW50ZXJuYWw6NjAwMC90ZXN0Y2FzZT9jdXJyZW50U2NoZW1hPXBlcnNvbiZ1c2VVbmljb2RlPXRydWUmY2hhcmFjdGVyRW5jb2Rpbmc9VVRGOA==
+  dbUserName: cG9zdGdyZXM=
+  dbPassword: cG9zdGdyZXM=
+
+postgres-chart:
+  includePostgresChart: false

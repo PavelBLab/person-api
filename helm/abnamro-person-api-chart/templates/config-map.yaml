@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "abnamro-person-api-chart.fullname" . }}
+  labels:
+    {{- include "abnamro-person-api-chart.labels" . | nindent 4 }}
+data:
+  SPRING_PROFILES_ACTIVE: {{ .Values.configMap.data.springProfilesActive }}
+  SERVER_PORT: {{ .Values.configMap.data.serverPort | quote }}
+  init-db.sh: |
+    {{ .Values.configMap.data.initDbSh | nindent 5 }}

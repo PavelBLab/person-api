@@ -1,0 +1,74 @@
+{{- if .Values.includePostgresChart }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "postgres-chart.fullname" . }}
+  labels:
+    {{- include "postgres-chart.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.deployment.autoscaling.enabled }}
+  replicas: {{ .Values.deployment.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "postgres-chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.deployment.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        environment: {{ .Values.environment }}
+        {{- include "postgres-chart.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.deployment.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.deployment.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.deployment.securityContext | nindent 12 }}
+          image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.targetPort }}
+              protocol: TCP
+          {{- with .Values.deployment.envs }}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          livenessProbe:
+            {{- toYaml .Values.deployment.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.deployment.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.deployment.resources | nindent 12 }}
+          {{- with .Values.deployment.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.deployment.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+  {{- end }}

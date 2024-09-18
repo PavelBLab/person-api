@@ -1,0 +1,59 @@
+# Default values for postgres-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+includePostgresChart: true
+
+# Kind: Service
+service:
+  type: ""
+  port: ""
+  targetPort: ""
+
+# Kind: Deployment
+deployment:
+  replicaCount: ""
+  image:
+    repository: ""
+    pullPolicy: ""
+    tag: ""
+  autoscaling:
+    enabled: ""
+    minReplicas: ""
+    maxReplicas: ""
+    targetCPUUtilizationPercentage: ""
+  imagePullSecrets: [ ]
+  nameOverride: ""
+  fullnameOverride: ""
+  podAnnotations: { }
+  podLabels: { }
+  podSecurityContext: { }
+  securityContext: { }
+  resources: { }
+  volumes: [ ]
+  volumeMounts: [ ]
+  nodeSelector: { }
+  tolerations: [ ]
+  affinity: { }
+
+# Kind: StorageAccount
+storageClass:
+  metadata:
+    name: ""
+  provisioner: ""
+  volumeBindingMode: ""
+
+# Kind: PersistentVolume
+persistentVolume:
+  spec:
+    capacity:
+      storage: ""
+    accessModes: ""
+    hostPath:
+      path: ""
+
+# Kind: PersistentVolumeClaim
+persistentVolumeClaim:
+  spec:
+    resources:
+      requests:
+        storage: ""

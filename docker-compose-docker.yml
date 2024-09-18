@@ -2,7 +2,7 @@ name: person-api-docker
 
 services:
   postgres:
-    container_name: postgres-dev
+    container_name: postgres-docker
     image: postgres:16.4
     ports:
       - 5480:5432
@@ -14,14 +14,13 @@ services:
       POSTGRES_PASSWORD: postgres
 
   person-service:
-    container_name: person-service-dev
+    container_name: person-service-docker
     image: pavelbr368/abnamro-person-api:0.1.2
     build: .
     ports:
       - 9090:9091
     environment:
-      SPRING_PROFILES_ACTIVE: dev
-      SPRING_DATASOURCE_NAME: org.postgresql.Driver
+      SPRING_PROFILES_ACTIVE: docker
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/testcase?currentSchema=person&useUnicode=true&characterEncoding=UTF8
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
