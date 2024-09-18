@@ -1,0 +1,85 @@
+---
+# Source: abnamro-person-api/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: abnamro-person-api
+  labels:
+    helm.sh/chart: abnamro-person-api-0.1.3
+    app.kubernetes.io/name: abnamro-person-api
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: abnamro-person-api
+      app.kubernetes.io/instance: release-name
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        environment: dev
+        helm.sh/chart: abnamro-person-api-0.1.3
+        app.kubernetes.io/name: abnamro-person-api
+        app.kubernetes.io/instance: release-name
+        app.kubernetes.io/version: "1.16.0"
+        app.kubernetes.io/managed-by: Helm
+    spec:
+      imagePullSecrets:
+        - name: abnamro-person-api-dockerhub-registry
+      securityContext:
+        null
+      containers:
+        - name: abnamro-person-api
+          securityContext:
+            null
+          image: "pavelbr368/abnamro-person-api:0.1.3"
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 4001
+              protocol: TCP
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: dev
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                secretKeyRef:
+                  key: DB_URL
+                  name: abnamro-person-api
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: DB_USERNAME
+                  name: abnamro-person-api
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: DB_PASSWORD
+                  name: abnamro-person-api
+          livenessProbe:
+            failureThreshold: 9
+            httpGet:
+              path: /actuator/health/liveness
+              port: 4001
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          readinessProbe:
+            failureThreshold: 9
+            httpGet:
+              path: /actuator/health/readiness
+              port: 4001
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          resources:
+            limits:
+              cpu: 0.5
+              memory: 600Mi
+            requests:
+              cpu: 0.2
+              memory: 400Mi

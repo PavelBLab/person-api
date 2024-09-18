@@ -1,0 +1,23 @@
+---
+# Source: abnamro-person-api/templates/limit-range.yaml
+# The LimitRange resource in Kubernetes applies to all Pods and containers within a specific namespace.
+# It does not apply to nodes directly.
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: abnamro-person-api
+spec:
+  limits:
+    - default: # Sets the default CPU and Memory limit for containers to 100m (100 millicores) and 500mb respectively
+        cpu: 100m
+        memory: 500Mi
+      defaultRequest: # Sets the default CPU request for containers to 100m (100 millicores) and 500mb respectively
+        cpu: 100m
+        memory: 500Mi
+      max: # Sets the maximum allowed CPU limit for containers to 0.5 core and 600mb respectively
+        cpu: 0.5
+        memory: 600Mi
+      min: # Sets the minimum allowed CPU limit for containers to 50m (50 millicores) and 400mb respectively
+        cpu: 50m
+        memory: 400Mi
+      type: Container

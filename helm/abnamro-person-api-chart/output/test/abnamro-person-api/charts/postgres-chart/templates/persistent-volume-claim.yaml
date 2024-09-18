@@ -1,0 +1,19 @@
+---
+# Source: abnamro-person-api/charts/postgres-chart/templates/persistent-volume-claim.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres
+  labels:
+    helm.sh/chart: postgres-chart-0.1.0
+    app.kubernetes.io/name: postgres
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Mi

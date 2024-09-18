@@ -13,7 +13,7 @@
 
 	<groupId>com.testcase.api</groupId>
 	<artifactId>abnamro-person-api</artifactId>
-	<version>0.1.0-SNAPSHOT</version>
+	<version>0.1.3</version>
 	<name>persons</name>
 	<description>The Person API provides endpoints to interact with the person data.</description>
 	<url/>
