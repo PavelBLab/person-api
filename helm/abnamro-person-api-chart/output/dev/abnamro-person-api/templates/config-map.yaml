@@ -5,7 +5,7 @@ kind: ConfigMap
 metadata:
   name: abnamro-person-api
   labels:
-    helm.sh/chart: abnamro-person-api-0.1.3
+    helm.sh/chart: abnamro-person-api-0.1.4
     app.kubernetes.io/name: abnamro-person-api
     app.kubernetes.io/instance: release-name
     app.kubernetes.io/version: "1.16.0"

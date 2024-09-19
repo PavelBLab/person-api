@@ -16,7 +16,117 @@ The **Person Management System** offers a centralized way to manage person-relat
 The API is built to be intuitive, secure, and scalable for both small and large datasets.
 
 ---
+## **Project Folder Structure**
 
+Here is an overview of the project's folder structure:
+
+```
+├── Dockerfile
+├── HELP.md
+├── README.md
+├── dev-scripts
+│   └── init-person-db.sql
+├── docker-compose-dev.yml
+├── docker-compose-docker.yml
+├── docker-compose-local.yml
+├── docs
+│   ├── 1_RUN_DOCKERFILE_README.md
+│   ├── 2.1_DOCKER_COMPOSE_LOCAL_README.md
+│   ├── 2.2_DOCKER_COMPOSE_DOCKER_README.md
+│   ├── 2.3_DOCKER_COMPOSE_AND_KUBERNETES_README.md
+│   ├── 2.4_KUBERNETES_README.md
+│   ├── 3_HPA.md
+├── helm
+│   └── abnamro-person-api-chart
+│       ├── Chart.yaml
+│       ├── charts
+│       │   └── postgres-chart
+│       │       ├── Chart.yaml
+│       │       ├── templates
+│       │       │   ├── deployment.yaml
+│       │       │   ├── persistent-volume-claim.yaml
+│       │       │   ├── persistent-volume.yaml
+│       │       │   ├── service.yaml
+│       │       │   ├── storage-class.yaml
+│       │       └── values.yaml
+│       ├── templates
+│       │   ├── config-map.yaml
+│       │   ├── deployment.yaml
+│       │   ├── hpa.yaml
+│       │   ├── limit-range.yaml
+│       │   ├── registry.yaml
+│       │   ├── secret.yaml
+│       │   ├── service.yaml
+│       ├── values-dev.yaml
+│       ├── values-test.yaml
+│       └── values.yaml
+├── load-testing
+│   ├── load_test_dev.js
+│   └── load_test_test.js
+├── pom.xml
+├── src
+│   ├── main
+│   │   ├── java
+│   │   │   └── com
+│   │   │       └── testcase
+│   │   │           └── api
+│   │   │               └── persons
+│   │   │                   ├── PersonsApplication.java
+│   │   │                   ├── configurations
+│   │   │                   │   └── HealthCheckIndicatorConfiguration.java
+│   │   │                   ├── controllers
+│   │   │                   │   └── PersonController.java
+│   │   │                   ├── converters
+│   │   │                   │   └── CountryCodeConverter.java
+│   │   │                   ├── exceptions
+│   │   │                   │   ├── GlobalExceptionHandler.java
+│   │   │                   │   └── PersonNotFoundException.java
+│   │   │                   ├── mappers
+│   │   │                   │   └── PersonMapper.java
+│   │   │                   ├── persistence
+│   │   │                   │   ├── entities
+│   │   │                   │   │   └── Person.java
+│   │   │                   │   └── repositories
+│   │   │                   │       ├── PersonRepository.java
+│   │   │                   │       └── specifications
+│   │   │                   │           └── PersonSpecification.java
+│   │   │                   ├── services
+│   │   │                   │   └── PersonService.java
+│   │   │                   └── validators
+│   │   │                       └── GenderValidator.java
+│   │   └── resources
+│   │       ├── application-dev.yml
+│   │       ├── application-docker.yml
+│   │       ├── application-local.yml
+│   │       ├── application-test.yml
+│   │       ├── application.yml
+│   │       ├── liquibase
+│   │       │   ├── changelogs
+│   │       │   │   ├── 0.1.0
+│   │       │   │   │   └── db.changelog-v0.1.0-init-person.sql
+│   │       │   │   └── 0.1.2
+│   │       │   │       └── db.changelog-v0.1.2-alter-person.sql
+│   │       │   └── master.yml
+│   │       └── open-api
+│   │           └── provider
+│   │               └── person-api.yml
+│   └── test
+│       ├── java
+│       │   └── com
+│       │       └── testcase
+│       │           └── api
+│       │               └── persons
+│       │                   ├── integration
+│       │                   │   ├── IntegrationTest.java
+│       │                   │   └── PersonsCrudIT.java
+│       │                   └── utils
+│       │                       └── TestDataFactory.java
+│       └── resources
+│           ├── application-it.yml
+│           └── init-db.sql
+```
+
+---
 ## **Endpoints**
 
 ### **1. Retrieve All Persons**
