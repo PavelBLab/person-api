@@ -49,6 +49,9 @@ hs_err_pid*
 # IntelliJ
 /out/
 
+# VsCode
+.vscode
+
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 
@@ -66,3 +69,6 @@ gradle/jib.gradle
 /.gradle/
 .DS_Store
 /src/main/generated/
+
+## Folder with certificates
+/root/.m2
