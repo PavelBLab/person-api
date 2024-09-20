@@ -15,7 +15,7 @@ services:
 
   person-service:
     container_name: person-service-docker
-    image: pavelbr368/abnamro-person-api:0.1.4
+    image: pavelbr368/abnamro-person-api:0.1.5
     build: .
     ports:
       - 9090:9091

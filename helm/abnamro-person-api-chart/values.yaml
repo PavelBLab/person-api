@@ -16,7 +16,7 @@ deployment:
     repository: pavelbr368/abnamro-person-api
     pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.
-    tag: 0.1.4
+    tag: 0.1.5
 
   imagePullSecrets:
     - name: abnamro-person-api-dockerhub-registry
