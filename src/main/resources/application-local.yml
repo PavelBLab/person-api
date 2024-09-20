@@ -11,6 +11,6 @@ spring:
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:9000/testcase?currentSchema=person&useUnicode=true&characterEncoding=UTF8
+    url: jdbc:postgresql://localhost:9001/testcase?currentSchema=person&useUnicode=true&characterEncoding=UTF8
     username: postgres
     password: postgres
