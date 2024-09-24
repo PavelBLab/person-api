@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS person.person(
     gender        VARCHAR(255) NOT NULL DEFAULT 'NA'
 );
 
+
 --liquibase formatted sql
 --changeset id:1588510956471-1
 INSERT INTO person.person (id, name, surname, date_of_birth, address, country, job_title, annual_salary, employer, gender)

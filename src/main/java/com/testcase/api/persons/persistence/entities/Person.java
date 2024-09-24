@@ -3,6 +3,7 @@ package com.testcase.api.persons.persistence.entities;
 import com.testcase.api.persons.provider.models.CountryCode;
 import com.testcase.api.persons.provider.models.Gender;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -22,14 +23,22 @@ public class Person {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @NotNull
     private String name;
+
+    @NotNull
     private String surname;
+
+    @NotNull
     private LocalDate dateOfBirth;
+
+    @NotNull
     private String address;
 
     @Enumerated(EnumType.STRING)
     private CountryCode country;
 
+    @NotNull
     private String jobTitle;
     private BigDecimal annualSalary;
     private String employer;

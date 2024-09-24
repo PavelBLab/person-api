@@ -10,10 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,10 +37,10 @@ public class PersonController implements PersonApi {
     }
 
     @Override
-    public ResponseEntity<PersonDto> updatePerson(final UUID personId, final PersonMiniDto personMiniDto) {
-        return personId == null || personMiniDto == null ?
+    public ResponseEntity<PersonDto> patchPerson(final UUID personId, final Map<String, String> map) {
+        return personId == null || map == null ?
                 new ResponseEntity<>(HttpStatus.BAD_REQUEST) :
-                new ResponseEntity<>(personService.updateOne(personId, personMiniDto), OK);
+                new ResponseEntity<>(personService.patchOne(personId, map), HttpStatus.OK);
     }
 
     @Override

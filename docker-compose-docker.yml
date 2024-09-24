@@ -1,3 +1,4 @@
+# Configuration for setting up both Person API and Postgres database containers in Docker.
 name: person-api-docker
 
 services:
