@@ -232,7 +232,7 @@ paths:
 
 
     patch:
-      operationId: updatePerson
+      operationId: patchPerson
       tags:
         - Person
       summary: 'Update a specific person by ID.'
@@ -246,7 +246,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PersonMiniDto'
+              type: object
+              additionalProperties:
+                type: string
+              example:
+                name: "John Doe"
+                surname: "Doe"
+                dateOfBirth: "1985-06-15"
       responses:
         200:
           description: 'A single person.'

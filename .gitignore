@@ -70,5 +70,5 @@ gradle/jib.gradle
 .DS_Store
 /src/main/generated/
 
-## Folder with certificates
+## Folder with maven settings
 /root/.m2

@@ -320,38 +320,55 @@
 				<artifactId>openapi-generator-maven-plugin</artifactId>
 				<version>${openapi-generator-maven-plugin.version}</version>
 				<inherited>false</inherited>
-				<configuration>
-					<generatorName>spring</generatorName>
-					<generateSupportingFiles>true</generateSupportingFiles>
-					<library>spring-boot</library>
-					<configOptions>
-						<useSpringBoot3>true</useSpringBoot3>
-						<immutableModels>true</immutableModels>
-						<useBeanValidation>true</useBeanValidation>
-						<performBeanValidation>true</performBeanValidation>
-						<interfaceOnly>true</interfaceOnly>
-						<skipDefaultInterface>true</skipDefaultInterface>
-						<validateSpec>false</validateSpec>
-						<useTags>true</useTags>
-						<sourceFolder>src/main/java</sourceFolder>
-						<additionalModelTypeAnnotations>
-							@lombok.experimental.SuperBuilder
-							@lombok.NoArgsConstructor
-							@lombok.Data
-							@lombok.extern.jackson.Jacksonized
-						</additionalModelTypeAnnotations>
-					</configOptions>
-				</configuration>
 				<executions>
+					<!-- Execution for generating Markdown documentation -->
 					<execution>
-						<id>persons-api</id>
+						<id>generate-markdown-docs</id>
 						<goals>
 							<goal>generate</goal>
 						</goals>
 						<configuration>
 							<inputSpec>${project.basedir}/src/main/resources/open-api/provider/person-api.yml</inputSpec>
+							<generatorName>markdown</generatorName>
+							<output>${project.build.directory}/generated-docs</output>
+							<configOptions>
+								<additionalMarkdownHeader>## Additional Information</additionalMarkdownHeader> <!-- Custom header for extra information -->
+								<generateReadme>true</generateReadme> <!-- Generate README.md file -->
+								<usePathAsName>false</usePathAsName> <!-- Use path as name for the endpoints -->
+								<useTags>true</useTags> <!-- Use tags for grouping endpoints -->
+							</configOptions>
+						</configuration>
+					</execution>
+
+					<!-- Execution for generating Spring code -->
+					<execution>
+						<id>generate-spring-code</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>${project.basedir}/src/main/resources/open-api/provider/person-api.yml</inputSpec>
+							<generatorName>spring</generatorName>
+							<library>spring-boot</library>
 							<apiPackage>com.testcase.api.persons.provider.controllers</apiPackage>
 							<modelPackage>com.testcase.api.persons.provider.models</modelPackage>
+							<configOptions>
+								<useSpringBoot3>true</useSpringBoot3>
+								<immutableModels>true</immutableModels>
+								<useBeanValidation>true</useBeanValidation>
+								<performBeanValidation>true</performBeanValidation>
+								<interfaceOnly>true</interfaceOnly>
+								<skipDefaultInterface>true</skipDefaultInterface>
+								<validateSpec>false</validateSpec>
+								<useTags>true</useTags>
+								<sourceFolder>src/main/java</sourceFolder>
+								<additionalModelTypeAnnotations>
+									@lombok.experimental.SuperBuilder
+									@lombok.NoArgsConstructor
+									@lombok.Data
+									@lombok.extern.jackson.Jacksonized
+								</additionalModelTypeAnnotations>
+							</configOptions>
 						</configuration>
 					</execution>
 				</executions>

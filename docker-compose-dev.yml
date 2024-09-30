@@ -1,3 +1,4 @@
+# Configuration for setting up a Postgres database container in Docker to connect to it from a Kubernetes cluster.
 name: person-api-dev
 
 services:
