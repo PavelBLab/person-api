@@ -14,16 +14,3 @@ data:
   SPRING_PROFILES_ACTIVE: test
   SERVER_PORT: "5001"
   init-db.sh: |
-    
-     #!/bin/bash
-     # Make the script executable
-     chmod +x /docker-entrypoint-initdb.d/init-db.sh
-     
-     # Wait for PostgreSQL to be ready
-     until pg_isready -h localhost -p 5432; do
-     echo "Waiting for PostgreSQL to start..."
-     sleep 2
-     done
-     
-     # Run the SQL command to create the schema
-     psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "CREATE SCHEMA IF NOT EXISTS person;"

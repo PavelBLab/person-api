@@ -23,7 +23,7 @@ spec:
   template:
     metadata:
       labels:
-        environment: test
+        environment: dev
         helm.sh/chart: abnamro-person-api-0.1.5
         app.kubernetes.io/name: abnamro-person-api
         app.kubernetes.io/instance: release-name
@@ -42,11 +42,11 @@ spec:
           imagePullPolicy: Always
           ports:
             - name: http
-              containerPort: 5001
+              containerPort: 4001
               protocol: TCP
           env:
             - name: SPRING_PROFILES_ACTIVE
-              value: test
+              value: dev
             - name: SPRING_DATASOURCE_URL
               valueFrom:
                 secretKeyRef:
@@ -66,14 +66,14 @@ spec:
             failureThreshold: 9
             httpGet:
               path: /actuator/health/liveness
-              port: 5001
+              port: 4001
             initialDelaySeconds: 10
             periodSeconds: 5
           readinessProbe:
             failureThreshold: 9
             httpGet:
               path: /actuator/health/readiness
-              port: 5001
+              port: 4001
             initialDelaySeconds: 10
             periodSeconds: 5
           resources:
